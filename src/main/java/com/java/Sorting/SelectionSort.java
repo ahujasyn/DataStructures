@@ -47,14 +47,14 @@ public class SelectionSort {
          */
         public static void selectionSortEarly(int [] unsortedList){
 
-            for(int i=0;i<unsortedList.length;i++){
+            for(int firstElement=0;firstElement<unsortedList.length;firstElement++){
                 boolean swapped = false;
-                System.out.println("\ni =" + i);
-                for(int j=i+1;j<unsortedList.length;j++){
-                    if(unsortedList[i]>unsortedList[j]){
-                        swap(unsortedList,i,j);  // passing index with list to method.
+                System.out.println("\nfirstElement =" + firstElement);
+                for(int secondElement=firstElement+1;secondElement<unsortedList.length;secondElement++){
+                    if(unsortedList[firstElement]>unsortedList[secondElement]){
+                        swap(unsortedList,firstElement,secondElement);  // passing index with list to method.
                         swapped= true;
-                        System.out.print("Swapping "+i +" and "+ j + " ");
+                        System.out.print("Swapping "+firstElement +" and "+ secondElement + " ");
                         System.out.println(Arrays.toString(unsortedList));
                     }
                 } // end of the internal  loop
