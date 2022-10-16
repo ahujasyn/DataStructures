@@ -1,0 +1,43 @@
+variables:
+     MAVEN_OPTS: -Dmaven.repo.local=.m2/repository 
+     
+image: maven:3.8.6-openjdk-18
+stages: 
+    - build
+    - test
+    - build_image
+
+
+cache: 
+    paths:
+        - .m2/repository
+
+
+build_job:
+
+    stage: build
+    
+
+    script:
+   
+          - mvn compile
+
+test_job:
+
+    stage: test
+    
+    script:
+          - mvn test 
+
+build_docker_image:
+    stage: build_image
+    image: docker
+    
+    services: 
+        - docker:dind
+    
+    script:     
+        - echo CI_REGISTRY_PASSWORD >> docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+        - docker build -t  registry.gitlab.com/vineetsemwal82/cicddemo2 .
+
+

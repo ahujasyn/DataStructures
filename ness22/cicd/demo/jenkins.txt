@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('git') {
+            steps {
+               git 'https://github.com/vineetsemwal/demo.git'
+            }
+        }
+
+         stage('maven build package') {
+            steps {
+               sh 'mvn clean package'
+            }
+
+        }
+
+            stage('docker build image ') {
+            steps {
+               sh 'docker build -t vineetsemwal/pipedemo:v1 .'
+            }
+            }
+
+          stage('docker push image ') {
+            steps {
+
+               withCredentials([string(credentialsId: 'cred8', variable: 'cred8')])  {
+                sh 'docker login -u vineetsemwal -p "${cred8}"'
+             }
+
+               sh 'docker push vineetsemwal/pipedemo:v1'
+            }
+
+        }
+
+         stage('docker run container') {
+
+        steps{
+
+
+
+         sshagent (['ec2key5']) {
+         sh 'ssh -o StrictHostKeyChecking=no  ubuntu@ec2-18-117-192-7.us-east-2.compute.amazonaws.com   docker run -p 8585:8585 --name pipedemo -d vineetsemwal/pipedemo:v1'
+         }
+       }
+
+
+
+    }
+
+
+    }
+}
+
